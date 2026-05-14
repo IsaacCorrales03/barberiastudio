@@ -436,4 +436,18 @@ def import_appointments():
     return redirect(url_for("barber_panel"))
 
 if __name__ == "__main__":
+    import threading, random, time, requests as _req
+    from datetime import datetime as _dt
+
+    def _keep_alive():
+        url = "https://barberiastudio.onrender.com"
+        while True:
+            try:
+                r = _req.get(url, timeout=10)
+                print(f"[keep-alive {_dt.now().strftime('%H:%M:%S')}] {r.status_code}")
+            except Exception as e:
+                print(f"[keep-alive {_dt.now().strftime('%H:%M:%S')}] ERROR: {e}")
+            import random as _r; time.sleep(_r.randint(45, 90))
+
+    threading.Thread(target=_keep_alive, daemon=True).start()
     app.run(debug=True, port=5000)
