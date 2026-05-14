@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horario — {{ barber.name }}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root { --burgundy:#7B1C2A; --gold:#C9A84C; --gold-light:#E2C47A; --cream:#F5F0E8; --charcoal:#1A1A1A; }
+  body { font-family:'Barlow',sans-serif; background:var(--charcoal); color:var(--cream); min-height:100vh; }
+  .font-display { font-family:'Cormorant Garamond',serif; }
+  .font-condensed { font-family:'Barlow Condensed',sans-serif; }
+  .gold-line { background:linear-gradient(90deg,transparent,var(--gold),transparent); height:1px; }
+
+  .sidebar { background:#0d0d0d; border-right:1px solid rgba(201,168,76,0.08); width:220px; min-height:100vh; flex-shrink:0; }
+  .sidebar-item { display:flex; align-items:center; gap:0.75rem; padding:0.8rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:#6b7280; transition:all 0.2s; text-decoration:none; }
+  .sidebar-item:hover { color:var(--cream); background:rgba(255,255,255,0.03); }
+  .sidebar-item.active { color:var(--gold-light); border-left:2px solid var(--gold); background:rgba(201,168,76,0.05); }
+
+  label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:#9ca3af; display:block; margin-bottom:0.4rem; }
+  input[type=time] { background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.15); color:var(--cream); padding:0.75rem 1rem; border-radius:2px; font-family:'Barlow',sans-serif; font-size:1rem; outline:none; transition:all 0.2s; }
+  input[type=time]:focus { border-color:rgba(201,168,76,0.45); background:rgba(201,168,76,0.04); }
+  input[type=time]::-webkit-calendar-picker-indicator { filter:invert(0.7); cursor:pointer; }
+
+  .btn-gold { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--charcoal); font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.15em; padding:0.9rem 2.5rem; border:none; cursor:pointer; transition:all 0.3s; text-transform:uppercase; font-size:0.9rem; border-radius:2px; }
+  .btn-gold:hover { box-shadow:0 0 20px rgba(201,168,76,0.3); transform:translateY(-1px); }
+
+  .flash-success { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); color:#86efac; padding:0.75rem 1rem; border-radius:2px; font-size:0.85rem; margin-bottom:1rem; }
+  .flash-error { background:rgba(180,30,50,0.15); border:1px solid rgba(180,30,50,0.3); color:#f87171; padding:0.75rem 1rem; border-radius:2px; font-size:0.85rem; margin-bottom:1rem; }
+</style>
+</head>
+<body>
+<div class="flex">
+  <!-- SIDEBAR -->
+  <aside class="sidebar flex flex-col">
+    <div class="p-6 border-b" style="border-color:rgba(201,168,76,0.08)">
+      <p class="font-display text-xl mb-0.5" style="color:var(--gold-light)">Bebote Studio</p>
+      <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Panel Barbero</p>
+    </div>
+    <div class="py-4 flex-1">
+      <a href="/barbero/panel" class="sidebar-item"><span>📋</span> Citas</a>
+      <a href="/barbero/horario" class="sidebar-item active"><span>🕐</span> Horario</a>
+      <a href="/barbero/estilos" class="sidebar-item"><span>✂️</span> Estilos</a>
+      <a href="/barbero/barberos" class="sidebar-item"><span>👤</span> Barberos</a>
+      <a href="/" class="sidebar-item"><span>🌐</span> Ver sitio</a>
+    </div>
+    <div class="p-4 border-t" style="border-color:rgba(201,168,76,0.08)">
+      <p class="font-condensed text-xs text-gray-500 uppercase tracking-wide mb-1">{{ barber.name }}</p>
+      <a href="/barbero/logout" class="font-condensed text-xs text-gray-700 hover:text-red-400 uppercase tracking-wide transition">Cerrar sesión</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="flex-1 p-10 max-w-xl">
+    <div class="mb-10">
+      <p class="font-condensed text-xs tracking-[0.3em] uppercase mb-2" style="color:var(--gold)">Configuración</p>
+      <h1 class="font-display text-4xl font-light mb-2" style="color:var(--cream)">Horario de Atención</h1>
+      <div class="gold-line max-w-xs"></div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="flash-{{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- Current -->
+    <div class="mb-8 p-6 rounded-sm" style="background:rgba(255,255,255,0.02);border:1px solid rgba(201,168,76,0.1)">
+      <p class="font-condensed text-xs text-gray-500 uppercase tracking-widest mb-3">Horario actual</p>
+      <p class="font-display text-5xl font-light" style="color:var(--gold-light)">
+        {{ barber.schedule.start }} <span class="text-gray-600 text-3xl mx-2">—</span> {{ barber.schedule.end }}
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" action="/barbero/horario">
+      <div class="grid grid-cols-2 gap-6 mb-8">
+        <div>
+          <label>Hora de apertura</label>
+          <input type="time" name="start" value="{{ barber.schedule.start }}" required>
+        </div>
+        <div>
+          <label>Hora de cierre</label>
+          <input type="time" name="end" value="{{ barber.schedule.end }}" required>
+        </div>
+      </div>
+      <button type="submit" class="btn-gold">Guardar Horario</button>
+    </form>
+
+    <p class="text-gray-600 text-xs mt-6 font-condensed tracking-wide">
+      El horario afecta los slots disponibles al agendar citas. Las citas existentes no se ven afectadas.
+    </p>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agendar Cita — Bebote Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --burgundy: #7B1C2A;
+    --burgundy-dark: #4A0F1A;
+    --gold: #C9A84C;
+    --gold-light: #E2C47A;
+    --cream: #F5F0E8;
+    --charcoal: #1A1A1A;
+    --mid: #252525;
+  }
+  body { font-family: 'Barlow', sans-serif; background: var(--charcoal); color: var(--cream); min-height: 100vh; }
+  .font-display { font-family: 'Cormorant Garamond', serif; }
+  .font-condensed { font-family: 'Barlow Condensed', sans-serif; }
+  .gold-line { background: linear-gradient(90deg, transparent, var(--gold), transparent); height: 1px; }
+
+  label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: #9ca3af; display: block; margin-bottom: 0.4rem; }
+  
+  input, select, textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,168,76,0.15);
+    color: var(--cream);
+    padding: 0.75rem 1rem;
+    border-radius: 2px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: rgba(201,168,76,0.5);
+    background: rgba(201,168,76,0.05);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.07);
+  }
+  select option { background: #2d2d2d; color: var(--cream); }
+  input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); cursor: pointer; }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--charcoal);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 1rem 2.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+  .btn-gold:hover { box-shadow: 0 0 25px rgba(201,168,76,0.35); transform: translateY(-1px); }
+  .btn-gold:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .step-badge {
+    width: 2rem; height: 2rem; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 0.85rem;
+    background: var(--burgundy);
+    color: var(--gold-light);
+    flex-shrink: 0;
+  }
+
+  /* Style cards */
+  .style-card input[type=radio] { display: none; }
+  .style-card label {
+    display: block;
+    cursor: pointer;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(201,168,76,0.12);
+    background: rgba(255,255,255,0.02);
+    transition: all 0.2s;
+    border-radius: 2px;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: none;
+    color: #ccc;
+    margin: 0;
+  }
+  .style-card label:hover { border-color: rgba(201,168,76,0.35); color: var(--cream); }
+  .style-card input[type=radio]:checked + label {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.1);
+    color: var(--gold-light);
+  }
+
+  /* Payment options */
+  .pay-card input[type=radio] { display: none; }
+  .pay-card label {
+    display: flex; align-items: center; gap: 0.6rem;
+    cursor: pointer;
+    padding: 0.9rem 1.2rem;
+    border: 1px solid rgba(201,168,76,0.12);
+    background: rgba(255,255,255,0.02);
+    transition: all 0.2s;
+    border-radius: 2px;
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+    text-transform: none;
+    color: #ccc;
+    margin: 0;
+  }
+  .pay-card label:hover { border-color: rgba(201,168,76,0.35); color: var(--cream); }
+  .pay-card input[type=radio]:checked + label {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.08);
+    color: var(--gold-light);
+  }
+
+  /* Time slots */
+  .slot-btn {
+    padding: 0.5rem 0.8rem;
+    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(255,255,255,0.03);
+    color: #ccc;
+    cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+  .slot-btn:hover { border-color: rgba(201,168,76,0.4); color: var(--cream); }
+  .slot-btn.selected { border-color: var(--gold); background: rgba(201,168,76,0.12); color: var(--gold-light); }
+  .slot-btn.occupied { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+
+  .section-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+    padding: 2rem;
+  }
+
+  .flash-error { background: rgba(180,30,50,0.2); border: 1px solid rgba(180,30,50,0.4); color: #f87171; padding: 0.75rem 1rem; border-radius: 2px; font-size: 0.9rem; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--charcoal); }
+  ::-webkit-scrollbar-thumb { background: var(--burgundy); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav style="background: rgba(10,5,7,0.95); border-bottom: 1px solid rgba(201,168,76,0.1);" class="px-6 py-4">
+  <div class="max-w-5xl mx-auto flex items-center justify-between">
+    <a href="/" class="font-display text-xl" style="color:var(--gold-light)">Bebote Studio</a>
+    <a href="/" class="font-condensed text-xs tracking-widest text-gray-500 hover:text-gray-300 uppercase transition">← Inicio</a>
+  </div>
+</nav>
+
+<div class="max-w-3xl mx-auto px-6 py-16">
+
+  <!-- Header -->
+  <div class="text-center mb-12">
+    <p class="font-condensed text-xs tracking-[0.4em] uppercase mb-3" style="color:var(--gold)">Reserva tu turno</p>
+    <h1 class="font-display text-5xl font-light" style="color:var(--cream)">Agenda tu Cita</h1>
+    <div class="gold-line mt-6 max-w-xs mx-auto"></div>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, msg in messages %}
+      <div class="flash-{{ category }} mb-6">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <form method="POST" action="/agendar" id="apptForm">
+
+    <!-- PASO 1: Datos personales -->
+    <div class="section-card mb-6">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="step-badge">1</div>
+        <h2 class="font-condensed text-lg tracking-widest uppercase" style="color:var(--cream)">Tus Datos</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label>Nombre completo *</label>
+          <input type="text" name="client_name" placeholder="Tu nombre" required>
+        </div>
+        <div>
+          <label>Teléfono / WhatsApp *</label>
+          <input type="tel" name="client_phone" placeholder="8888-8888" required>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2: Barbero y fecha -->
+    <div class="section-card mb-6">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="step-badge">2</div>
+        <h2 class="font-condensed text-lg tracking-widest uppercase" style="color:var(--cream)">Barbero y Fecha</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label>Barbero *</label>
+          <select name="barber_id" id="barberSelect" required onchange="loadSlots()">
+            <option value="">— Seleccionar —</option>
+            {% for barber in barbers %}
+            <option value="{{ barber.id }}" data-start="{{ barber.schedule.start }}" data-end="{{ barber.schedule.end }}">
+              {{ barber.name }} ({{ barber.specialty }})
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label>Fecha *</label>
+          <input type="date" name="date" id="dateInput" required min="{{ today }}" onchange="loadSlots()">
+        </div>
+      </div>
+
+      <!-- Slots de hora -->
+      <div class="mt-6" id="slotsSection" style="display:none">
+        <label>Hora de inicio *</label>
+        <div id="slotsContainer" class="flex flex-wrap gap-2 mt-2"></div>
+        <input type="hidden" name="time" id="timeInput" required>
+        <p id="slotsMsg" class="text-gray-600 text-xs mt-2 font-condensed tracking-wide"></p>
+      </div>
+    </div>
+
+    <!-- PASO 3: Tipo de corte y estilo -->
+    <div class="section-card mb-6">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="step-badge">3</div>
+        <h2 class="font-condensed text-lg tracking-widest uppercase" style="color:var(--cream)">Tipo y Estilo</h2>
+      </div>
+      <div class="mb-5">
+        <label>Tipo de servicio *</label>
+        <select name="cut_type" required>
+          <option value="">— Seleccionar —</option>
+          {% for ct in cut_types %}
+          <option value="{{ ct }}">{{ ct }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>Estilo de corte *</label>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+          {% for style in styles %}
+          <div class="style-card">
+            <input type="radio" name="style_id" id="style_{{ style.id }}" value="{{ style.id }}" required>
+            <label for="style_{{ style.id }}" style="padding:0; overflow:hidden; border-radius:2px;">
+              {% if style.photo %}
+                <img src="{{ style.photo }}" alt="{{ style.name }}" style="width:100%; height:100px; object-fit:cover; display:block; pointer-events:none;">
+              {% else %}
+                <div style="width:100%; height:100px; background:rgba(123,28,42,0.15); display:flex; align-items:center; justify-content:center; pointer-events:none;">
+                  <span style="font-size:1.8rem; color:rgba(201,168,76,0.2);">✂</span>
+                </div>
+              {% endif %}
+              <div style="padding:0.6rem 0.8rem;">
+                <span class="font-semibold block" style="font-family:'Barlow Condensed',sans-serif; font-size:0.9rem; color:inherit">{{ style.name }}</span>
+                <span class="block text-gray-500 text-xs mt-0.5" style="font-size:0.72rem">{{ style.desc }}</span>
+              </div>
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 4: Método de pago y notas -->
+    <div class="section-card mb-8">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="step-badge">4</div>
+        <h2 class="font-condensed text-lg tracking-widest uppercase" style="color:var(--cream)">Pago y Detalles</h2>
+      </div>
+      <div class="mb-5">
+        <label>Método de pago *</label>
+        <div class="grid grid-cols-2 gap-3 mt-2">
+          <div class="pay-card">
+            <input type="radio" name="payment_method" id="pay_efectivo" value="Efectivo" required>
+            <label for="pay_efectivo">
+              <span>💵</span> Efectivo
+            </label>
+          </div>
+          <div class="pay-card">
+            <input type="radio" name="payment_method" id="pay_sinpe" value="Sinpe Móvil">
+            <label for="pay_sinpe">
+              <span>📱</span> Sinpe Móvil
+            </label>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label>Notas adicionales <span class="text-gray-600">(opcional)</span></label>
+        <textarea name="notes" rows="3" placeholder="Alguna referencia de foto, preferencias especiales..."></textarea>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-gold w-full rounded-sm" id="submitBtn">
+      CONFIRMAR SOLICITUD
+    </button>
+    <p class="text-center text-gray-600 text-xs mt-4 font-condensed tracking-wide">
+      El barbero revisará tu solicitud y la confirmará. Te llegará confirmación.
+    </p>
+  </form>
+</div>
+
+<script>
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('dateInput').min = today;
+
+  let occupiedSlots = [];
+
+  async function loadSlots() {
+    const barberId = document.getElementById('barberSelect').value;
+    const date = document.getElementById('dateInput').value;
+    const section = document.getElementById('slotsSection');
+    const container = document.getElementById('slotsContainer');
+    const msg = document.getElementById('slotsMsg');
+    const timeInput = document.getElementById('timeInput');
+
+    if (!barberId || !date) {
+      section.style.display = 'none';
+      return;
+    }
+
+    // Get barber schedule
+    const opt = document.querySelector(`#barberSelect option[value="${barberId}"]`);
+    const startH = parseInt(opt.dataset.start.split(':')[0]);
+    const endH = parseInt(opt.dataset.end.split(':')[0]);
+
+    // Fetch occupied
+    try {
+      const res = await fetch(`/api/ocupados?barber_id=${barberId}&date=${date}`);
+      occupiedSlots = await res.json();
+    } catch(e) {
+      occupiedSlots = [];
+    }
+
+    // Build slots every hour
+    container.innerHTML = '';
+    timeInput.value = '';
+
+    for (let h = startH; h < endH; h++) {
+      const time = `${String(h).padStart(2,'0')}:00`;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'slot-btn';
+      btn.textContent = time;
+      const isOccupied = occupiedSlots.includes(time);
+      if (isOccupied) {
+        btn.classList.add('occupied');
+        btn.disabled = true;
+        btn.title = 'Horario ocupado';
+      } else {
+        btn.onclick = () => selectSlot(time, btn);
+      }
+      container.appendChild(btn);
+    }
+
+    section.style.display = 'block';
+    msg.textContent = `${occupiedSlots.length} horario(s) ocupado(s)`;
+  }
+
+  function selectSlot(time, btn) {
+    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('timeInput').value = time;
+  }
+
+  document.getElementById('apptForm').addEventListener('submit', function(e) {
+    const time = document.getElementById('timeInput').value;
+    if (!time) {
+      e.preventDefault();
+      alert('Por favor selecciona una hora.');
+    }
+  });
+</script>
+
+</body>
+</html>

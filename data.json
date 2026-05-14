@@ -1,0 +1,74 @@
+{
+  "barbers": [
+    {
+      "id": "barber1",
+      "name": "Bebote",
+      "email": "bebote@studio.com",
+      "password": "bebote123",
+      "schedule": {
+        "start": "08:00",
+        "end": "20:00"
+      },
+      "bio": "Barbero profesional con más de 5 años de experiencia.",
+      "specialty": "Fade & Beard"
+    }
+  ],
+  "appointments": [],
+  "styles": [
+    {
+      "id": "s1",
+      "name": "Fade Clásico",
+      "desc": "Degradado limpio y preciso",
+      "photo": null
+    },
+    {
+      "id": "s2",
+      "name": "Pompadour",
+      "desc": "Estilo retro con volumen",
+      "photo": null
+    },
+    {
+      "id": "s3",
+      "name": "Buzz Cut",
+      "desc": "Corte al ras uniforme",
+      "photo": null
+    },
+    {
+      "id": "s4",
+      "name": "Undercut",
+      "desc": "Lados cortos, arriba largo",
+      "photo": null
+    },
+    {
+      "id": "s5",
+      "name": "Taper Fade",
+      "desc": "Degradado suave y elegante",
+      "photo": "/static/uploads/style_477e19e3.webp"
+    },
+    {
+      "id": "s6",
+      "name": "Caesar Cut",
+      "desc": "Corte romano clásico",
+      "photo": null
+    },
+    {
+      "id": "s7",
+      "name": "Skin Fade",
+      "desc": "Fade hasta la piel",
+      "photo": null
+    },
+    {
+      "id": "s8",
+      "name": "Quiff",
+      "desc": "Textura y volumen al frente",
+      "photo": null
+    }
+  ],
+  "cut_types": [
+    "Corte de cabello",
+    "Corte + barba",
+    "Solo barba",
+    "Corte + diseño",
+    "Corte + barba + diseño"
+  ]
+}

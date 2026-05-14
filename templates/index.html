@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bebote Studio — Barbería Premium</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --burgundy: #7B1C2A;
+    --burgundy-dark: #4A0F1A;
+    --gold: #C9A84C;
+    --gold-light: #E2C47A;
+    --cream: #F5F0E8;
+    --charcoal: #1A1A1A;
+    --mid: #2D2D2D;
+  }
+  body { font-family: 'Barlow', sans-serif; background: var(--charcoal); color: var(--cream); }
+  .font-display { font-family: 'Cormorant Garamond', serif; }
+  .font-condensed { font-family: 'Barlow Condensed', sans-serif; }
+
+  .hero-bg {
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a0a0e 40%, #2d1018 70%, #1a0a0e 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(123,28,42,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 50%);
+  }
+  .noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 150px;
+  }
+
+  .gold-line { background: linear-gradient(90deg, transparent, var(--gold), transparent); height: 1px; }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
+    color: var(--charcoal);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    transition: all 0.3s;
+    background-size: 200% auto;
+  }
+  .btn-gold:hover { background-position: right center; box-shadow: 0 0 20px rgba(201,168,76,0.4); transform: translateY(-1px); }
+  .btn-burgundy {
+    background: var(--burgundy);
+    color: var(--cream);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    transition: all 0.3s;
+  }
+  .btn-burgundy:hover { background: #8f2030; }
+
+  .card-style {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    transition: all 0.3s;
+  }
+  .card-style:hover { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.04); transform: translateY(-2px); }
+
+  .navbar { background: rgba(10,5,7,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(201,168,76,0.1); }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .fade-up { animation: fadeUp 0.8s ease forwards; }
+  .delay-1 { animation-delay: 0.15s; opacity: 0; }
+  .delay-2 { animation-delay: 0.3s; opacity: 0; }
+  .delay-3 { animation-delay: 0.45s; opacity: 0; }
+
+  .scissors-divider::before { content: '✂'; color: var(--gold); font-size: 1.2rem; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar fixed top-0 left-0 right-0 z-50 px-6 py-4">
+  <div class="max-w-6xl mx-auto flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="font-display text-2xl text-gold-400" style="color:var(--gold-light)">BS</span>
+      <div class="gold-line w-8 opacity-50 hidden sm:block"></div>
+      <span class="font-condensed text-sm tracking-[0.2em] text-gray-400 uppercase hidden sm:block">Bebote Studio</span>
+    </div>
+    <div class="flex items-center gap-6">
+      <a href="#estilos" class="font-condensed text-sm tracking-widest text-gray-400 hover:text-amber-300 transition uppercase">Estilos</a>
+      <a href="#barberos" class="font-condensed text-sm tracking-widest text-gray-400 hover:text-amber-300 transition uppercase">Barberos</a>
+      <a href="/agendar" class="btn-gold px-5 py-2 text-sm rounded-sm">AGENDAR</a>
+      <a href="/barbero/login" class="text-gray-600 hover:text-gray-400 transition text-xs font-condensed tracking-widest uppercase">Panel</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-bg min-h-screen flex items-center justify-center relative pt-20">
+  <div class="noise"></div>
+  <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+    <p class="font-condensed text-xs tracking-[0.4em] text-amber-400 mb-6 fade-up" style="color:var(--gold)">BARBERÍA PREMIUM • COSTA RICA</p>
+    <div class="gold-line mb-8 fade-up delay-1"></div>
+    <h1 class="font-display text-7xl md:text-9xl font-light leading-none mb-6 fade-up delay-1">
+      <span class="block text-cream" style="color:var(--cream)">BEBOTE</span>
+      <span class="block italic text-5xl md:text-7xl" style="color:var(--gold-light)">Studio</span>
+    </h1>
+    <div class="gold-line mb-8 fade-up delay-2"></div>
+    <p class="font-light text-gray-400 text-lg mb-10 max-w-lg mx-auto fade-up delay-2">
+      Donde el arte del corte se convierte en identidad. Agenda tu cita y transforma tu estilo.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center fade-up delay-3">
+      <a href="/agendar" class="btn-gold px-10 py-4 text-base rounded-sm">AGENDA TU CITA</a>
+      <a href="#estilos" class="btn-burgundy px-10 py-4 text-base rounded-sm">VER ESTILOS</a>
+    </div>
+  </div>
+  <!-- Decorative lines -->
+  <div class="absolute bottom-0 left-0 right-0 h-32" style="background: linear-gradient(to top, var(--charcoal), transparent)"></div>
+</section>
+
+<!-- STATS BAR -->
+<div class="py-8 px-6" style="background: var(--burgundy-dark)">
+  <div class="max-w-4xl mx-auto grid grid-cols-3 divide-x divide-amber-900/30 text-center">
+    <div class="px-4">
+      <p class="font-display text-4xl text-amber-300" style="color:var(--gold-light)">5+</p>
+      <p class="font-condensed text-xs tracking-widest text-gray-400 uppercase mt-1">Años de experiencia</p>
+    </div>
+    <div class="px-4">
+      <p class="font-display text-4xl" style="color:var(--gold-light)">8</p>
+      <p class="font-condensed text-xs tracking-widest text-gray-400 uppercase mt-1">Estilos disponibles</p>
+    </div>
+    <div class="px-4">
+      <p class="font-display text-4xl" style="color:var(--gold-light)">8am–8pm</p>
+      <p class="font-condensed text-xs tracking-widest text-gray-400 uppercase mt-1">Horario de atención</p>
+    </div>
+  </div>
+</div>
+
+<!-- ESTILOS -->
+<section id="estilos" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="font-condensed text-xs tracking-[0.4em] uppercase mb-3" style="color:var(--gold)">Catálogo</p>
+      <h2 class="font-display text-5xl font-light" style="color:var(--cream)">Estilos Disponibles</h2>
+      <div class="gold-line mt-6 max-w-xs mx-auto"></div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {% for style in styles %}
+      <div class="card-style rounded-sm overflow-hidden">
+        {% if style.photo %}
+          <img src="{{ style.photo }}" alt="{{ style.name }}" style="width:100%; height:160px; object-fit:cover; display:block;">
+        {% else %}
+          <div style="width:100%; height:160px; background:rgba(123,28,42,0.2); display:flex; align-items:center; justify-content:center;">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:2.5rem; color:rgba(201,168,76,0.25);">✂</span>
+          </div>
+        {% endif %}
+        <div class="p-5">
+          <h3 class="font-condensed font-semibold text-lg tracking-wide mb-1" style="color:var(--cream)">{{ style.name }}</h3>
+          <p class="text-gray-500 text-sm">{{ style.desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-10">
+      <a href="/agendar" class="btn-gold px-10 py-4 rounded-sm inline-block text-sm">RESERVAR AHORA</a>
+    </div>
+  </div>
+</section>
+
+<!-- BARBEROS -->
+<section id="barberos" class="py-24 px-6" style="background: rgba(0,0,0,0.3)">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="font-condensed text-xs tracking-[0.4em] uppercase mb-3" style="color:var(--gold)">El equipo</p>
+      <h2 class="font-display text-5xl font-light" style="color:var(--cream)">Nuestros Barberos</h2>
+      <div class="gold-line mt-6 max-w-xs mx-auto"></div>
+    </div>
+    <div class="flex flex-wrap justify-center gap-8">
+      {% for barber in barbers %}
+      <div class="card-style p-8 rounded-sm text-center max-w-xs">
+        <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-display font-light"
+             style="background: linear-gradient(135deg, var(--burgundy), var(--burgundy-dark)); color: var(--gold-light); border: 2px solid rgba(201,168,76,0.2)">
+          {{ barber.name[0] }}
+        </div>
+        <h3 class="font-display text-2xl font-light mb-1" style="color:var(--cream)">{{ barber.name }}</h3>
+        <p class="font-condensed text-xs tracking-widest uppercase mb-4" style="color:var(--gold)">{{ barber.specialty }}</p>
+        <p class="text-gray-400 text-sm leading-relaxed">{{ barber.bio }}</p>
+        <div class="gold-line mt-6"></div>
+        <p class="font-condensed text-xs text-gray-500 mt-3 uppercase tracking-wide">
+          {{ barber.schedule.start }} — {{ barber.schedule.end }}
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-12 px-6 text-center border-t" style="border-color: rgba(201,168,76,0.1)">
+  <p class="font-display text-2xl italic mb-2" style="color:var(--gold-light)">Bebote Studio</p>
+  <p class="font-condensed text-xs tracking-widest text-gray-600 uppercase">Barbería Premium • Costa Rica</p>
+  <div class="gold-line mt-8 max-w-xs mx-auto"></div>
+  <p class="text-gray-700 text-xs mt-4">© 2024 Bebote Studio</p>
+</footer>
+
+</body>
+</html>

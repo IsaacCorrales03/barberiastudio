@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cita Registrada — Bebote Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --burgundy:#7B1C2A; --burgundy-dark:#4A0F1A; --gold:#C9A84C; --gold-light:#E2C47A; --cream:#F5F0E8; --charcoal:#1A1A1A; }
+  body { font-family:'Barlow',sans-serif; background:var(--charcoal); color:var(--cream); min-height:100vh; display:flex; align-items:center; justify-content:center; }
+  .font-display { font-family:'Cormorant Garamond',serif; }
+  .font-condensed { font-family:'Barlow Condensed',sans-serif; }
+  .gold-line { background:linear-gradient(90deg,transparent,var(--gold),transparent); height:1px; }
+  
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    padding: 3rem;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .status-badge {
+    display: inline-flex; align-items:center; gap:0.5rem;
+    padding: 0.4rem 1.2rem;
+    border-radius: 999px;
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase;
+  }
+  .badge-pending { background:rgba(201,168,76,0.12); border:1px solid rgba(201,168,76,0.3); color:var(--gold-light); }
+  .badge-confirmed { background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.3); color:#86efac; }
+  .badge-cancelled { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; }
+
+  .detail-row {
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .detail-label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:#6b7280; }
+  .detail-value { font-size:0.9rem; color:var(--cream); font-weight:500; }
+
+  .btn-gold { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--charcoal); font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.12em; padding:0.85rem 2rem; border:none; cursor:pointer; transition:all 0.3s; text-transform:uppercase; font-size:0.85rem; border-radius:2px; display:inline-block; text-decoration:none; }
+  .btn-outline { border:1px solid rgba(201,168,76,0.3); color:var(--gold-light); font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:0.12em; padding:0.85rem 2rem; transition:all 0.3s; text-transform:uppercase; font-size:0.85rem; border-radius:2px; display:inline-block; text-decoration:none; }
+  .btn-outline:hover { border-color:var(--gold); background:rgba(201,168,76,0.05); }
+
+  @keyframes checkIn { 0%{transform:scale(0) rotate(-30deg);opacity:0} 70%{transform:scale(1.15) rotate(5deg)} 100%{transform:scale(1) rotate(0);opacity:1} }
+  .check-anim { animation: checkIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+</style>
+</head>
+<body class="px-4 py-16">
+<div class="card mx-auto">
+
+  <!-- Icon -->
+  <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl check-anim"
+       style="background: linear-gradient(135deg, var(--burgundy), var(--burgundy-dark)); border: 2px solid rgba(201,168,76,0.3)">
+    ✓
+  </div>
+
+  <p class="font-condensed text-xs tracking-[0.4em] uppercase mb-2" style="color:var(--gold)">Bebote Studio</p>
+  <h1 class="font-display text-4xl font-light mb-4" style="color:var(--cream)">¡Solicitud Enviada!</h1>
+  <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+    Tu cita ha sido registrada. El barbero revisará tu solicitud y la confirmará a la brevedad.
+  </p>
+
+  <div class="mb-6">
+    {% if appt.status == 'pending' %}
+      <span class="status-badge badge-pending">⏳ Pendiente de confirmación</span>
+    {% elif appt.status == 'confirmed' %}
+      <span class="status-badge badge-confirmed">✓ Confirmada</span>
+    {% else %}
+      <span class="status-badge badge-cancelled">✗ Cancelada</span>
+    {% endif %}
+  </div>
+
+  <div class="gold-line mb-6"></div>
+
+  <!-- Detalles -->
+  <div class="text-left mb-6">
+    <div class="detail-row">
+      <span class="detail-label">Código</span>
+      <span class="detail-value font-mono text-amber-400" style="color:var(--gold-light)">#{{ appt.id.upper() }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Cliente</span>
+      <span class="detail-value">{{ appt.client_name }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Barbero</span>
+      <span class="detail-value">{{ appt.barber_name }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Fecha</span>
+      <span class="detail-value">{{ appt.date }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Hora</span>
+      <span class="detail-value">{{ appt.time }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Servicio</span>
+      <span class="detail-value">{{ appt.cut_type }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Estilo</span>
+      <span class="detail-value">{{ appt.style_name }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Pago</span>
+      <span class="detail-value">{{ appt.payment_method }}</span>
+    </div>
+    {% if appt.notes %}
+    <div class="detail-row" style="border-bottom:none">
+      <span class="detail-label">Notas</span>
+      <span class="detail-value text-gray-400 text-xs max-w-xs text-right">{{ appt.notes }}</span>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="gold-line mb-8"></div>
+
+  <div class="flex flex-col sm:flex-row gap-3 justify-center">
+    <a href="/agendar" class="btn-gold">Nueva Cita</a>
+    <a href="/" class="btn-outline">Inicio</a>
+  </div>
+
+  <p class="text-gray-700 text-xs mt-6 font-condensed tracking-wide">
+    Guarda tu código de referencia: <strong style="color:var(--gold)">#{{ appt.id.upper() }}</strong>
+  </p>
+</div>
+</body>
+</html>

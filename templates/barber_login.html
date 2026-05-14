@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barbero — Login</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root { --burgundy:#7B1C2A; --gold:#C9A84C; --gold-light:#E2C47A; --cream:#F5F0E8; --charcoal:#1A1A1A; }
+  body { font-family:'Barlow',sans-serif; background:var(--charcoal); color:var(--cream); min-height:100vh; display:flex; align-items:center; justify-content:center; }
+  .font-display { font-family:'Cormorant Garamond',serif; }
+  .font-condensed { font-family:'Barlow Condensed',sans-serif; }
+  .gold-line { background:linear-gradient(90deg,transparent,var(--gold),transparent); height:1px; }
+  label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:#9ca3af; display:block; margin-bottom:0.4rem; }
+  input { width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.15); color:var(--cream); padding:0.75rem 1rem; border-radius:2px; font-family:'Barlow',sans-serif; font-size:0.9rem; outline:none; transition:all 0.2s; }
+  input:focus { border-color:rgba(201,168,76,0.5); background:rgba(201,168,76,0.04); }
+  .btn-gold { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--charcoal); font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.15em; padding:0.9rem; border:none; cursor:pointer; transition:all 0.3s; text-transform:uppercase; font-size:0.9rem; width:100%; border-radius:2px; }
+  .btn-gold:hover { box-shadow:0 0 25px rgba(201,168,76,0.3); }
+  .flash-error { background:rgba(180,30,50,0.2); border:1px solid rgba(180,30,50,0.4); color:#f87171; padding:0.75rem 1rem; border-radius:2px; font-size:0.85rem; margin-bottom:1.5rem; }
+</style>
+</head>
+<body class="px-4">
+<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(201,168,76,0.15);border-radius:4px;padding:3rem;max-width:400px;width:100%;" class="mx-auto">
+  
+  <div class="text-center mb-8">
+    <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-display"
+         style="background:linear-gradient(135deg,var(--burgundy),#2d0610);border:1px solid rgba(201,168,76,0.2);color:var(--gold-light)">BS</div>
+    <p class="font-condensed text-xs tracking-[0.4em] uppercase mb-2" style="color:var(--gold)">Panel del Barbero</p>
+    <h1 class="font-display text-3xl font-light" style="color:var(--cream)">Iniciar Sesión</h1>
+    <div class="gold-line mt-4"></div>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, msg in messages %}
+      <div class="flash-{{ category }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <form method="POST" action="/barbero/login">
+    <div class="mb-4">
+      <label>Correo electrónico</label>
+      <input type="email" name="email" placeholder="barbero@studio.com" required>
+    </div>
+    <div class="mb-6">
+      <label>Contraseña</label>
+      <input type="password" name="password" placeholder="••••••••" required>
+    </div>
+    <button type="submit" class="btn-gold">Entrar al Panel</button>
+  </form>
+
+  <div class="text-center mt-6">
+    <a href="/" class="font-condensed text-xs tracking-widest text-gray-600 hover:text-gray-400 uppercase transition">← Volver al inicio</a>
+  </div>
+
+  <p class="text-center text-gray-700 text-xs mt-8 font-condensed">
+    Demo: bebote@studio.com / bebote123
+  </p>
+</div>
+</body>
+</html>
