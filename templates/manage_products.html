@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Productos — Bebote Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --burgundy:#7B1C2A; --burgundy-dark:#4A0F1A; --gold:#C9A84C; --gold-light:#E2C47A; --cream:#F5F0E8; --charcoal:#1A1A1A; --surface:#212121; }
+  body { font-family:'Barlow',sans-serif; background:var(--charcoal); color:var(--cream); }
+  .font-display { font-family:'Cormorant Garamond',serif; }
+  .font-condensed { font-family:'Barlow Condensed',sans-serif; }
+  .gold-line { background:linear-gradient(90deg,transparent,var(--gold),transparent); height:1px; }
+
+  .sidebar { background:#0d0d0d; border-right:1px solid rgba(201,168,76,0.08); width:220px; min-height:100vh; flex-shrink:0; }
+  .sidebar-item { display:flex; align-items:center; gap:0.75rem; padding:0.8rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:#6b7280; transition:all 0.2s; text-decoration:none; }
+  .sidebar-item:hover { color:var(--cream); background:rgba(255,255,255,0.03); }
+  .sidebar-item.active { color:var(--gold-light); border-left:2px solid var(--gold); background:rgba(201,168,76,0.05); }
+
+  label { font-family:'Barlow Condensed',sans-serif; font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; color:#9ca3af; display:block; margin-bottom:0.3rem; }
+  input, select, textarea { background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.15); color:var(--cream); padding:0.6rem 0.9rem; border-radius:2px; font-family:'Barlow',sans-serif; font-size:0.85rem; outline:none; transition:all 0.2s; width:100%; }
+  input:focus, select:focus, textarea:focus { border-color:rgba(201,168,76,0.45); }
+  textarea { resize:vertical; min-height:80px; }
+
+  .btn-gold-sm { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--charcoal); font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.8rem; letter-spacing:0.1em; padding:0.55rem 1.2rem; border:none; cursor:pointer; text-transform:uppercase; border-radius:2px; transition:all 0.2s; }
+  .btn-gold-sm:hover { opacity:0.9; }
+  .btn-edit { background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.2); color:var(--gold-light); font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.35rem 0.75rem; border-radius:2px; text-decoration:none; transition:all 0.2s; display:inline-block; }
+  .btn-edit:hover { background:rgba(201,168,76,0.15); }
+  .btn-danger { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.25); color:#fca5a5; font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.35rem 0.75rem; cursor:pointer; border-radius:2px; transition:all 0.2s; }
+  .btn-danger:hover { background:rgba(239,68,68,0.22); }
+
+  .flash-success { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); color:#86efac; padding:0.65rem 1rem; border-radius:2px; font-size:0.85rem; margin-bottom:1rem; }
+  .flash-error   { background:rgba(180,30,50,0.15); border:1px solid rgba(180,30,50,0.3); color:#f87171; padding:0.65rem 1rem; border-radius:2px; font-size:0.85rem; margin-bottom:1rem; }
+  .flash-info    { background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.25); color:#93c5fd; padding:0.65rem 1rem; border-radius:2px; font-size:0.85rem; margin-bottom:1rem; }
+
+  .form-panel { background:rgba(0,0,0,0.25); border:1px solid rgba(201,168,76,0.1); border-radius:4px; padding:1.5rem; }
+
+  .product-row { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:3px; padding:1rem 1.25rem; transition:all 0.2s; }
+  .product-row:hover { border-color:rgba(201,168,76,0.18); }
+
+  .product-thumb { width:52px; height:52px; object-fit:cover; border-radius:2px; flex-shrink:0; }
+  .product-thumb-placeholder { width:52px; height:52px; background:rgba(123,28,42,0.2); border-radius:2px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.4rem; color:rgba(201,168,76,0.25); }
+
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:var(--charcoal); }
+  ::-webkit-scrollbar-thumb { background:var(--burgundy); border-radius:3px; }
+</style>
+</head>
+<body>
+<div class="flex">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar flex flex-col">
+    <div class="p-6 border-b" style="border-color:rgba(201,168,76,0.08)">
+      <p class="font-display text-xl mb-0.5" style="color:var(--gold-light)">Bebote Studio</p>
+      <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Panel Barbero</p>
+    </div>
+    <div class="py-4 flex-1">
+      <a href="/barbero/panel" class="sidebar-item">
+        <span>📋</span> Citas
+        {% if pending_count > 0 %}
+          <span class="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full" style="background:var(--gold);color:var(--charcoal)">{{ pending_count }}</span>
+        {% endif %}
+      </a>
+      <a href="/barbero/horario" class="sidebar-item">
+        <span>🕐</span> Horario
+      </a>
+      <a href="/barbero/estilos" class="sidebar-item">
+        <span>✂️</span> Estilos
+      </a>
+      <a href="/barbero/productos" class="sidebar-item active">
+        <span>🧴</span> Productos
+      </a>
+      <a href="/barbero/barberos" class="sidebar-item">
+        <span>👤</span> Barberos
+      </a>
+      <a href="/" class="sidebar-item">
+        <span>🌐</span> Ver sitio
+      </a>
+    </div>
+    <div class="p-4 border-t" style="border-color:rgba(201,168,76,0.08)">
+      <p class="font-condensed text-xs text-gray-500 uppercase tracking-wide mb-1">{{ barber.name }}</p>
+      <a href="/barbero/logout" class="font-condensed text-xs text-gray-700 hover:text-red-400 uppercase tracking-wide transition">Cerrar sesión</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="flex-1 p-8 overflow-auto">
+
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <p class="font-condensed text-xs tracking-[0.3em] uppercase mb-1" style="color:var(--gold)">Inventario</p>
+        <h1 class="font-display text-4xl font-light" style="color:var(--cream)">Productos</h1>
+      </div>
+      <span class="font-condensed text-xs text-gray-600 uppercase tracking-wide">{{ products|length }} producto(s)</span>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="flash-{{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- Formulario nuevo producto -->
+    <div class="form-panel mb-8">
+      <h2 class="font-condensed text-sm tracking-[0.2em] uppercase mb-5" style="color:var(--gold)">Agregar producto</h2>
+      <form method="POST" action="/barbero/productos/crear" enctype="multipart/form-data">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label>Nombre *</label>
+            <input type="text" name="name" placeholder="Ej. Pomada mate" required>
+          </div>
+          <div>
+            <label>Marca *</label>
+            <input type="text" name="brand" placeholder="Ej. Uppercut Deluxe" required>
+          </div>
+          <div>
+            <label>Precio (₡) *</label>
+            <input type="number" name="price" placeholder="Ej. 5000" min="0" step="100" required>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label>Descripción</label>
+            <textarea name="desc" placeholder="Breve descripción del producto..."></textarea>
+          </div>
+          <div>
+            <label>Foto del producto</label>
+            <input type="file" name="photo" accept="image/*">
+          </div>
+        </div>
+        <button type="submit" class="btn-gold-sm">+ Agregar producto</button>
+      </form>
+    </div>
+
+    <!-- Lista productos -->
+    <div>
+      <h2 class="font-condensed text-sm tracking-[0.2em] uppercase text-gray-400 mb-4">Catálogo actual</h2>
+
+      {% if not products %}
+        <div class="text-center py-16 text-gray-600">
+          <p class="text-4xl mb-3" style="color:rgba(201,168,76,0.15)">🧴</p>
+          <p class="font-condensed text-sm tracking-widest uppercase">Sin productos registrados</p>
+        </div>
+      {% else %}
+        <div class="space-y-3">
+          {% for product in products %}
+          <div class="product-row flex items-center gap-4">
+
+            {% if product.photo %}
+              <img src="{{ product.photo }}" alt="{{ product.name }}" class="product-thumb">
+            {% else %}
+              <div class="product-thumb-placeholder">🧴</div>
+            {% endif %}
+
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-0.5">
+                <span class="font-condensed font-semibold text-sm tracking-wide" style="color:var(--cream)">{{ product.name }}</span>
+                <span class="font-condensed text-xs px-2 py-0.5 rounded-sm" style="background:rgba(123,28,42,0.25); border:1px solid rgba(123,28,42,0.4); color:var(--gold-light)">{{ product.brand }}</span>
+              </div>
+              <p class="text-gray-500 text-xs truncate">{{ product.desc or '—' }}</p>
+            </div>
+
+            <div class="text-right flex-shrink-0">
+              <p class="font-display text-xl" style="color:var(--gold-light)">₡{{ "{:,.0f}".format(product.price) }}</p>
+            </div>
+
+            <div class="flex gap-2 flex-shrink-0">
+              <a href="/barbero/productos/{{ product.id }}/editar" class="btn-edit">✎ Editar</a>
+              <form method="POST" action="/barbero/productos/{{ product.id }}/eliminar">
+                <button type="submit" class="btn-danger" onclick="return confirm('¿Eliminar {{ product.name }}?')">✕</button>
+              </form>
+            </div>
+
+          </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
