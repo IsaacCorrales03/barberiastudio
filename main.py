@@ -47,6 +47,8 @@ def load_data():
     for s in data.get("styles", []):
         if "photo" not in s:
             s["photo"] = None
+    if "products" not in data:   # ← y esto
+        data["products"] = []
     return data
 
 def save_data(data):
@@ -69,8 +71,11 @@ def get_appointments_for_barber(barber_id, target_date=None):
 @app.route("/")
 def index():
     data = load_data()
-    return render_template("index.html", barbers=data["barbers"], styles=data["styles"])
-
+    return render_template("index.html",
+        barbers=data["barbers"],
+        styles=data["styles"],
+        products=data.get("products", [])
+    )
 @app.route("/agendar", methods=["GET", "POST"])
 def agendar():
     data = load_data()
