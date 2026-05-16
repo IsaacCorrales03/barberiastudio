@@ -15,54 +15,14 @@
   ],
   "appointments": [],
   "styles": [
-    {
-      "id": "s1",
-      "name": "Fade Clásico",
-      "desc": "Degradado limpio y preciso",
-      "photo": null
-    },
-    {
-      "id": "s2",
-      "name": "Pompadour",
-      "desc": "Estilo retro con volumen",
-      "photo": null
-    },
-    {
-      "id": "s3",
-      "name": "Buzz Cut",
-      "desc": "Corte al ras uniforme",
-      "photo": null
-    },
-    {
-      "id": "s4",
-      "name": "Undercut",
-      "desc": "Lados cortos, arriba largo",
-      "photo": null
-    },
-    {
-      "id": "s5",
-      "name": "Taper Fade",
-      "desc": "Degradado suave y elegante",
-      "photo": "/static/uploads/style_477e19e3.webp"
-    },
-    {
-      "id": "s6",
-      "name": "Caesar Cut",
-      "desc": "Corte romano clásico",
-      "photo": null
-    },
-    {
-      "id": "s7",
-      "name": "Skin Fade",
-      "desc": "Fade hasta la piel",
-      "photo": null
-    },
-    {
-      "id": "s8",
-      "name": "Quiff",
-      "desc": "Textura y volumen al frente",
-      "photo": null
-    }
+    { "id": "s1", "name": "Fade Clásico",  "desc": "Degradado limpio y preciso",      "photo": null },
+    { "id": "s2", "name": "Pompadour",      "desc": "Estilo retro con volumen",        "photo": null },
+    { "id": "s3", "name": "Buzz Cut",       "desc": "Corte al ras uniforme",           "photo": null },
+    { "id": "s4", "name": "Undercut",       "desc": "Lados cortos, arriba largo",      "photo": null },
+    { "id": "s5", "name": "Taper Fade",     "desc": "Degradado suave y elegante",      "photo": "/static/uploads/style_477e19e3.webp" },
+    { "id": "s6", "name": "Caesar Cut",     "desc": "Corte romano clásico",            "photo": null },
+    { "id": "s7", "name": "Skin Fade",      "desc": "Fade hasta la piel",              "photo": null },
+    { "id": "s8", "name": "Quiff",          "desc": "Textura y volumen al frente",     "photo": null }
   ],
   "cut_types": [
     "Corte de cabello",
@@ -70,5 +30,31 @@
     "Solo barba",
     "Corte + diseño",
     "Corte + barba + diseño"
+  ],
+  "products": [
+    {
+      "id": "p1",
+      "name": "Pomada Mate",
+      "brand": "Uppercut Deluxe",
+      "desc": "Fijación fuerte con acabado mate. Ideal para fades y estilos texturizados.",
+      "price": 6500,
+      "photo": null
+    },
+    {
+      "id": "p2",
+      "name": "Aceite para Barba",
+      "brand": "Beardbrand",
+      "desc": "Hidrata y suaviza la barba. Aroma a madera de cedro y sándalo.",
+      "price": 4800,
+      "photo": null
+    },
+    {
+      "id": "p3",
+      "name": "Cera Modeladora",
+      "brand": "American Crew",
+      "desc": "Fijación media con brillo natural. Fórmula lavable con agua.",
+      "price": 5200,
+      "photo": null
+    }
   ]
 }

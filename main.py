@@ -434,6 +434,147 @@ def import_appointments():
 
     save_data(data)
     return redirect(url_for("barber_panel"))
+# ─── Gestión de productos ──────────────────────────────────────────────────────
+
+@app.route("/barbero/productos")
+def manage_products():
+    if "barber_id" not in session:
+        return redirect(url_for("barber_login"))
+    data = load_data()
+    barber = get_barber(session["barber_id"])
+    pending_count = sum(1 for a in data["appointments"] if a["barber_id"] == session["barber_id"] and a["status"] == "pending")
+    products = data.get("products", [])
+    return render_template("manage_products.html",
+        products=products,
+        barber=barber,
+        pending_count=pending_count
+    )
+
+@app.route("/barbero/productos/crear", methods=["POST"])
+def add_product():
+    if "barber_id" not in session:
+        return redirect(url_for("barber_login"))
+
+    name    = request.form.get("name", "").strip()
+    brand   = request.form.get("brand", "").strip()
+    desc    = request.form.get("desc", "").strip()
+    price   = request.form.get("price", "0").strip()
+    photo_file = request.files.get("photo")
+
+    if not all([name, brand, price]):
+        flash("Nombre, marca y precio son obligatorios.", "error")
+        return redirect(url_for("manage_products"))
+
+    try:
+        price = float(price)
+    except ValueError:
+        flash("El precio debe ser un número.", "error")
+        return redirect(url_for("manage_products"))
+
+    photo_path = None
+    if photo_file and photo_file.filename:
+        ext = photo_file.filename.rsplit(".", 1)[-1].lower()
+        if ext in ("jpg", "jpeg", "png", "webp", "gif"):
+            fname = f"product_{uuid.uuid4().hex[:8]}.{ext}"
+            photo_file.save(os.path.join(UPLOAD_FOLDER, fname))
+            photo_path = f"/static/uploads/{fname}"
+        else:
+            flash("Formato de imagen no soportado.", "error")
+            return redirect(url_for("manage_products"))
+
+    data = load_data()
+    if "products" not in data:
+        data["products"] = []
+
+    data["products"].append({
+        "id": f"p{uuid.uuid4().hex[:6]}",
+        "name": name,
+        "brand": brand,
+        "desc": desc,
+        "price": price,
+        "photo": photo_path
+    })
+    save_data(data)
+    flash(f"Producto '{name}' agregado.", "success")
+    return redirect(url_for("manage_products"))
+
+@app.route("/barbero/productos/<product_id>/editar", methods=["GET", "POST"])
+def edit_product(product_id):
+    if "barber_id" not in session:
+        return redirect(url_for("barber_login"))
+
+    data = load_data()
+    product = next((p for p in data.get("products", []) if p["id"] == product_id), None)
+    if not product:
+        flash("Producto no encontrado.", "error")
+        return redirect(url_for("manage_products"))
+
+    if request.method == "POST":
+        name   = request.form.get("name", "").strip()
+        brand  = request.form.get("brand", "").strip()
+        desc   = request.form.get("desc", "").strip()
+        price  = request.form.get("price", "0").strip()
+        photo_file = request.files.get("photo")
+
+        if not all([name, brand, price]):
+            flash("Nombre, marca y precio son obligatorios.", "error")
+            return redirect(url_for("edit_product", product_id=product_id))
+
+        try:
+            price = float(price)
+        except ValueError:
+            flash("El precio debe ser un número.", "error")
+            return redirect(url_for("edit_product", product_id=product_id))
+
+        if photo_file and photo_file.filename:
+            ext = photo_file.filename.rsplit(".", 1)[-1].lower()
+            if ext in ("jpg", "jpeg", "png", "webp", "gif"):
+                fname = f"product_{uuid.uuid4().hex[:8]}.{ext}"
+                photo_file.save(os.path.join(UPLOAD_FOLDER, fname))
+                product["photo"] = f"/static/uploads/{fname}"
+            else:
+                flash("Formato de imagen no soportado.", "error")
+                return redirect(url_for("edit_product", product_id=product_id))
+
+        product["name"]  = name
+        product["brand"] = brand
+        product["desc"]  = desc
+        product["price"] = price
+        save_data(data)
+        flash(f"Producto '{name}' actualizado.", "success")
+        return redirect(url_for("manage_products"))
+
+    barber = get_barber(session["barber_id"])
+    pending_count = sum(1 for a in data["appointments"] if a["barber_id"] == session["barber_id"] and a["status"] == "pending")
+    return render_template("edit_product.html",
+        product=product,
+        barber=barber,
+        pending_count=pending_count
+    )
+
+@app.route("/barbero/productos/<product_id>/eliminar", methods=["POST"])
+def delete_product(product_id):
+    if "barber_id" not in session:
+        return redirect(url_for("barber_login"))
+
+    data = load_data()
+    products = data.get("products", [])
+    product = next((p for p in products if p["id"] == product_id), None)
+
+    if not product:
+        flash("Producto no encontrado.", "error")
+        return redirect(url_for("manage_products"))
+
+    # Eliminar foto del disco si existe
+    if product.get("photo"):
+        file_path = product["photo"].lstrip("/")
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+    data["products"] = [p for p in products if p["id"] != product_id]
+    save_data(data)
+    flash(f"Producto '{product['name']}' eliminado.", "info")
+    return redirect(url_for("manage_products"))
 
 if __name__ == "__main__":
     import threading, random, time, requests as _req

@@ -32,9 +32,10 @@
   .badge-cancelled { background:rgba(239,68,68,0.1); color:#fca5a5; border:1px solid rgba(239,68,68,0.25); }
 
   label { font-family:'Barlow Condensed',sans-serif; font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; color:#9ca3af; display:block; margin-bottom:0.3rem; }
-  input, select { background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.15); color:var(--cream); padding:0.6rem 0.9rem; border-radius:2px; font-family:'Barlow',sans-serif; font-size:0.85rem; outline:none; transition:all 0.2s; }
-  input:focus, select:focus { border-color:rgba(201,168,76,0.45); }
+  input, select, textarea { background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.15); color:var(--cream); padding:0.6rem 0.9rem; border-radius:2px; font-family:'Barlow',sans-serif; font-size:0.85rem; outline:none; transition:all 0.2s; }
+  input:focus, select:focus, textarea:focus { border-color:rgba(201,168,76,0.45); }
   select option { background:#2d2d2d; }
+  textarea { resize:vertical; min-height:80px; }
 
   .btn-sm { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.45rem 1rem; border:none; cursor:pointer; transition:all 0.2s; border-radius:2px; }
   .btn-confirm { background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.3); color:#86efac; }
@@ -42,6 +43,8 @@
   .btn-cancel { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.25); color:#fca5a5; }
   .btn-cancel:hover { background:rgba(239,68,68,0.2); }
   .btn-gold-sm { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:var(--charcoal); font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.8rem; letter-spacing:0.1em; padding:0.55rem 1.2rem; border:none; cursor:pointer; text-transform:uppercase; border-radius:2px; }
+  .btn-danger-sm { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.25); color:#fca5a5; font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.35rem 0.75rem; cursor:pointer; border-radius:2px; transition:all 0.2s; }
+  .btn-danger-sm:hover { background:rgba(239,68,68,0.22); }
 
   .flash-success { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.25); color:#86efac; padding:0.65rem 1rem; border-radius:2px; font-size:0.85rem; margin-bottom:1rem; }
   .flash-error { background:rgba(180,30,50,0.15); border:1px solid rgba(180,30,50,0.3); color:#f87171; padding:0.65rem 1rem; border-radius:2px; font-size:0.85rem; margin-bottom:1rem; }
@@ -52,6 +55,15 @@
   .dur-radio label { display:inline-flex; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; border:1px solid rgba(201,168,76,0.2); background:rgba(255,255,255,0.03); cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:0.9rem; font-weight:600; color:#9ca3af; transition:all 0.15s; border-radius:2px; margin:0; }
   .dur-radio input[type=radio]:checked + label { border-color:var(--gold); background:rgba(201,168,76,0.12); color:var(--gold-light); }
   .dur-radio label:hover { border-color:rgba(201,168,76,0.35); color:var(--cream); }
+
+  /* Product cards in panel */
+  .product-row { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:3px; padding:1rem 1.25rem; transition:all 0.2s; }
+  .product-row:hover { border-color:rgba(201,168,76,0.18); }
+
+  .product-thumb { width:52px; height:52px; object-fit:cover; border-radius:2px; flex-shrink:0; }
+  .product-thumb-placeholder { width:52px; height:52px; background:rgba(123,28,42,0.2); border-radius:2px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:rgba(201,168,76,0.25); }
+
+  .form-panel { background:rgba(0,0,0,0.25); border:1px solid rgba(201,168,76,0.1); border-radius:4px; padding:1.5rem; }
 
   ::-webkit-scrollbar { width:5px; }
   ::-webkit-scrollbar-track { background:var(--charcoal); }
@@ -68,19 +80,22 @@
       <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Panel Barbero</p>
     </div>
     <div class="py-4 flex-1">
-      <a href="/barbero/panel" class="sidebar-item active">
+      <a href="/barbero/panel" class="sidebar-item {% if active_section == 'citas' %}active{% endif %}">
         <span>📋</span> Citas
         {% if pending_count > 0 %}
-          <span class="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full text-charcoal" style="background:var(--gold);color:var(--charcoal)">{{ pending_count }}</span>
+          <span class="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full" style="background:var(--gold);color:var(--charcoal)">{{ pending_count }}</span>
         {% endif %}
       </a>
-      <a href="/barbero/horario" class="sidebar-item">
+      <a href="/barbero/horario" class="sidebar-item {% if active_section == 'horario' %}active{% endif %}">
         <span>🕐</span> Horario
       </a>
-      <a href="/barbero/estilos" class="sidebar-item">
+      <a href="/barbero/estilos" class="sidebar-item {% if active_section == 'estilos' %}active{% endif %}">
         <span>✂️</span> Estilos
       </a>
-      <a href="/barbero/barberos" class="sidebar-item">
+      <a href="/barbero/productos" class="sidebar-item {% if active_section == 'productos' %}active{% endif %}">
+        <span>🧴</span> Productos
+      </a>
+      <a href="/barbero/barberos" class="sidebar-item {% if active_section == 'barberos' %}active{% endif %}">
         <span>👤</span> Barberos
       </a>
       <a href="/" class="sidebar-item">
@@ -95,7 +110,16 @@
 
   <!-- MAIN -->
   <main class="flex-1 p-8 overflow-auto">
-    
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="flash-{{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- ══════════════════════════════════ CITAS VIEW ══════════════════════════════════ -->
+    {% if active_section == 'citas' or not active_section %}
+
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
       <div>
@@ -124,18 +148,10 @@
       </div>
     </div>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, msg in messages %}
-        <div class="flash-{{ category }}">{{ msg }}</div>
-      {% endfor %}
-    {% endwith %}
-
     <!-- Exportar / Importar citas -->
     <div class="flex flex-wrap gap-4 items-center mb-6 p-4 rounded-sm" style="background:rgba(0,0,0,0.15); border:1px solid rgba(201,168,76,0.08)">
       <span class="font-condensed text-xs tracking-[0.15em] uppercase text-gray-500">Citas JSON</span>
-      <!-- Exportar -->
       <a href="/barbero/citas/exportar" class="btn-gold-sm" style="text-decoration:none; display:inline-block;">↓ Guardar citas</a>
-      <!-- Importar -->
       <form method="POST" action="/barbero/citas/importar" enctype="multipart/form-data" class="flex gap-2 items-center flex-wrap">
         <input type="file" name="appts_file" accept=".json" style="background:rgba(255,255,255,0.03); border:1px solid rgba(201,168,76,0.12); color:var(--cream); padding:0.4rem 0.7rem; border-radius:2px; font-size:0.78rem; width:auto;">
         <select name="import_mode" style="width:auto; padding:0.4rem 0.7rem; font-size:0.78rem;">
@@ -185,8 +201,6 @@
         {% for appt in appts %}
         <div class="appt-card {{ appt.status }}">
           <div class="flex items-start justify-between gap-4 flex-wrap">
-            
-            <!-- Info principal -->
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-3 mb-3">
                 <span class="font-display text-2xl font-light" style="color:var(--gold-light)">{{ appt.time }}</span>
@@ -199,7 +213,6 @@
                   <span class="font-condensed text-xs text-gray-500">{{ appt.duration_hours }}h estimada(s)</span>
                 {% endif %}
               </div>
-              
               <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                 <div>
                   <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Cliente</p>
@@ -219,16 +232,13 @@
                   <p style="color:var(--cream)">{{ appt.payment_method }}</p>
                 </div>
               </div>
-              
               {% if appt.notes %}
               <p class="mt-3 text-gray-500 text-xs italic">📝 {{ appt.notes }}</p>
               {% endif %}
             </div>
 
-            <!-- Acciones -->
             {% if appt.status == 'pending' %}
             <div class="flex flex-col gap-2 min-w-0">
-              <!-- Confirmar con duración -->
               <form method="POST" action="/barbero/cita/{{ appt.id }}/accion" class="flex flex-col gap-2">
                 <input type="hidden" name="action" value="confirm">
                 <div>
@@ -244,7 +254,6 @@
                 </div>
                 <button type="submit" class="btn-gold-sm">✓ Confirmar</button>
               </form>
-              <!-- Cancelar -->
               <form method="POST" action="/barbero/cita/{{ appt.id }}/accion">
                 <input type="hidden" name="action" value="cancel">
                 <button type="submit" class="btn-sm btn-cancel w-full" onclick="return confirm('¿Cancelar esta cita?')">✗ Cancelar</button>
@@ -258,7 +267,6 @@
               </form>
             </div>
             {% endif %}
-
           </div>
 
           <div class="flex items-center gap-2 mt-3 pt-3" style="border-top:1px solid rgba(255,255,255,0.04)">
@@ -269,6 +277,107 @@
         {% endfor %}
       </div>
     </div>
+
+    {% endif %}
+    <!-- ══════════════ END CITAS VIEW ══════════════ -->
+
+
+    <!-- ══════════════════════════════════ PRODUCTOS VIEW ══════════════════════════════════ -->
+    {% if active_section == 'productos' %}
+
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <p class="font-condensed text-xs tracking-[0.3em] uppercase mb-1" style="color:var(--gold)">Inventario</p>
+        <h1 class="font-display text-4xl font-light" style="color:var(--cream)">Productos</h1>
+      </div>
+      <span class="font-condensed text-xs text-gray-600 uppercase tracking-wide">{{ products|length }} producto(s)</span>
+    </div>
+
+    <!-- Formulario nuevo producto -->
+    <div class="form-panel mb-8">
+      <h2 class="font-condensed text-sm tracking-[0.2em] uppercase mb-5" style="color:var(--gold)">Agregar producto</h2>
+      <form method="POST" action="/barbero/productos/crear" enctype="multipart/form-data">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label>Nombre</label>
+            <input type="text" name="name" placeholder="Ej. Pomada mate" required style="width:100%">
+          </div>
+          <div>
+            <label>Marca</label>
+            <input type="text" name="brand" placeholder="Ej. Uppercut Deluxe" required style="width:100%">
+          </div>
+          <div>
+            <label>Precio (₡)</label>
+            <input type="number" name="price" placeholder="Ej. 5000" min="0" step="100" required style="width:100%">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label>Descripción</label>
+            <textarea name="desc" placeholder="Breve descripción del producto..." style="width:100%"></textarea>
+          </div>
+          <div>
+            <label>Foto del producto</label>
+            <input type="file" name="photo" accept="image/*" style="width:100%">
+          </div>
+        </div>
+        <button type="submit" class="btn-gold-sm">+ Agregar producto</button>
+      </form>
+    </div>
+
+    <!-- Lista de productos -->
+    <div>
+      <h2 class="font-condensed text-sm tracking-[0.2em] uppercase text-gray-400 mb-4">Catálogo actual</h2>
+
+      {% if not products %}
+        <div class="text-center py-16 text-gray-600">
+          <p class="text-4xl mb-3" style="color:rgba(201,168,76,0.15)">🧴</p>
+          <p class="font-condensed text-sm tracking-widest uppercase">Sin productos registrados</p>
+        </div>
+      {% endif %}
+
+      <div class="space-y-3">
+        {% for product in products %}
+        <div class="product-row flex items-center gap-4">
+
+          <!-- Thumbnail -->
+          {% if product.photo %}
+            <img src="{{ product.photo }}" alt="{{ product.name }}" class="product-thumb">
+          {% else %}
+            <div class="product-thumb-placeholder">🧴</div>
+          {% endif %}
+
+          <!-- Info -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap mb-0.5">
+              <span class="font-condensed font-semibold text-sm tracking-wide" style="color:var(--cream)">{{ product.name }}</span>
+              <span class="font-condensed text-xs px-2 py-0.5 rounded-sm" style="background:rgba(123,28,42,0.25); border:1px solid rgba(123,28,42,0.4); color:var(--gold-light)">{{ product.brand }}</span>
+            </div>
+            <p class="text-gray-500 text-xs truncate">{{ product.desc }}</p>
+          </div>
+
+          <!-- Precio -->
+          <div class="text-right flex-shrink-0">
+            <p class="font-display text-xl" style="color:var(--gold-light)">₡{{ "{:,.0f}".format(product.price) }}</p>
+          </div>
+
+          <!-- Acciones -->
+          <div class="flex gap-2 flex-shrink-0">
+            <a href="/barbero/productos/{{ product.id }}/editar" class="btn-sm" style="background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.2); color:var(--gold-light); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.35rem 0.75rem; border-radius:2px;">
+              ✎ Editar
+            </a>
+            <form method="POST" action="/barbero/productos/{{ product.id }}/eliminar" style="display:inline;">
+              <button type="submit" class="btn-danger-sm" onclick="return confirm('¿Eliminar este producto?')">✕</button>
+            </form>
+          </div>
+
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% endif %}
+    <!-- ══════════════ END PRODUCTOS VIEW ══════════════ -->
 
   </main>
 </div>
