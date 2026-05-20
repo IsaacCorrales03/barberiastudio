@@ -126,6 +126,7 @@ def agendar():
             "notes": notes,
             "status": "pending",
             "duration_hours": None,
+            "barber_phone": barber["number"],
             "created_at": datetime.now().isoformat()
         }
 
@@ -217,30 +218,57 @@ def barber_panel():
     )
 
 @app.route("/barbero/cita/<appt_id>/accion", methods=["POST"])
-def appt_action(appt_id):
-    if "barber_id" not in session:
-        return redirect(url_for("barber_login"))
-
+def cita_accion(appt_id):
     action = request.form.get("action")
+    duration = request.form.get("duration")
     data = load_data()
-    appt = next((a for a in data["appointments"] if a["id"] == appt_id), None)
 
-    if not appt or appt["barber_id"] != session["barber_id"]:
+    appt = next((a for a in data["appointments"] if a["id"] == appt_id), None)
+    if not appt:
         flash("Cita no encontrada.", "error")
-        return redirect(url_for("barber_panel"))
+        return redirect(url_for("barbero_panel"))
 
     if action == "confirm":
-        duration = int(request.form.get("duration", 1))
         appt["status"] = "confirmed"
-        appt["duration_hours"] = duration
-        flash(f"Cita confirmada ({duration}h).", "success")
+        if duration:
+            appt["duration_hours"] = int(duration)
+        save_data(data)
+
+        # Mensaje al cliente
+        msg = (
+            f"*Bebote Studio — Cita Confirmada*\n\n"
+            f"Hola {appt['client_name']}, tu cita ha sido *confirmada*.\n\n"
+            f"Fecha: {appt['date']}\n"
+            f"Hora: {appt['time']}\n"
+            f"Servicio: {appt['cut_type']}\n"
+            f"Estilo: {appt['style_name']}\n"
+            f"Ref: #{appt['id'].upper()}\n\n"
+            f"Te esperamos."
+        )
+
     elif action == "cancel":
         appt["status"] = "cancelled"
-        flash("Cita cancelada.", "info")
+        save_data(data)
 
-    save_data(data)
-    return redirect(url_for("barber_panel", date=appt["date"]))
+        motivo = request.form.get("motivo", "").strip()
+        msg = (
+            f"*Bebote Studio — Cita No Disponible*\n\n"
+            f"Hola {appt['client_name']}, lamentablemente tu cita fue *rechazada*.\n\n"
+            f"Fecha: {appt['date']}\n"
+            f"Hora: {appt['time']}\n"
+            f"Ref: #{appt['id'].upper()}\n"
+            + (f"\nMotivo: {motivo}" if motivo else "") +
+            f"\n\nPuedes agendar una nueva cita en nuestra pagina."
+        )
+    else:
+        return redirect(url_for("barbero_panel"))
 
+    # Limpiar número del cliente
+    phone = appt.get("client_phone", "").replace("+", "").replace(" ", "").replace("-", "")
+    from urllib.parse import quote
+    wa_url = f"https://wa.me/{phone}?text={quote(msg)}"
+
+    return redirect(wa_url)
 @app.route("/barbero/horario", methods=["GET", "POST"])
 def barber_schedule():
     if "barber_id" not in session:

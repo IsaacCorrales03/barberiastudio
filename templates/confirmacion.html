@@ -121,9 +121,22 @@
 
   <div class="gold-line mb-8"></div>
 
+  <!-- Construir mensaje WhatsApp -->
+  {% set wa_msg = "*Nueva cita - Bebote Studio*%0A%0A" 
+    ~ "Código: %23" ~ appt.id.upper() ~ "%0A"
+    ~ "Cliente: " ~ appt.client_name ~ "%0A"
+    ~ "Servicio: " ~ appt.cut_type ~ "%0A"
+    ~ "Estilo: " ~ appt.style_name ~ "%0A"
+    ~ "Fecha: " ~ appt.date ~ "%0A"
+    ~ "Hora: " ~ appt.time ~ "%0A"
+    ~ "Pago: " ~ appt.payment_method
+    ~ ("" if not appt.notes else "%0A Notas: " ~ appt.notes) %}
+
+  {% set wa_number = appt.barber_phone | replace("+", "") | replace(" ", "") %}
+
   <div class="flex flex-col sm:flex-row gap-3 justify-center">
-    <a href="/agendar" class="btn-gold">Nueva Cita</a>
-    <a href="/" class="btn-outline">Inicio</a>
+    <a href="https://wa.me/{{ wa_number }}?text={{ wa_msg }}" 
+      target="_blank" class="btn-gold">Confirmar Cita</a>
   </div>
 
   <p class="text-gray-700 text-xs mt-6 font-condensed tracking-wide">

@@ -199,82 +199,92 @@
 
       <div class="space-y-4">
         {% for appt in appts %}
-        <div class="appt-card {{ appt.status }}">
-          <div class="flex items-start justify-between gap-4 flex-wrap">
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="font-display text-2xl font-light" style="color:var(--gold-light)">{{ appt.time }}</span>
-                <span class="badge badge-{{ appt.status }}">
-                  {% if appt.status == 'pending' %}⏳ Pendiente
-                  {% elif appt.status == 'confirmed' %}✓ Confirmada
-                  {% else %}✗ Cancelada{% endif %}
-                </span>
-                {% if appt.duration_hours %}
-                  <span class="font-condensed text-xs text-gray-500">{{ appt.duration_hours }}h estimada(s)</span>
-                {% endif %}
-              </div>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                <div>
-                  <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Cliente</p>
-                  <p class="font-medium" style="color:var(--cream)">{{ appt.client_name }}</p>
-                  <p class="text-gray-500 text-xs">{{ appt.client_phone }}</p>
-                </div>
-                <div>
-                  <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Servicio</p>
-                  <p style="color:var(--cream)">{{ appt.cut_type }}</p>
-                </div>
-                <div>
-                  <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Estilo</p>
-                  <p style="color:var(--cream)">{{ appt.style_name }}</p>
-                </div>
-                <div>
-                  <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Pago</p>
-                  <p style="color:var(--cream)">{{ appt.payment_method }}</p>
-                </div>
-              </div>
-              {% if appt.notes %}
-              <p class="mt-3 text-gray-500 text-xs italic">📝 {{ appt.notes }}</p>
-              {% endif %}
-            </div>
+<div class="appt-card {{ appt.status }}">
+  <div class="flex items-start justify-between gap-4 flex-wrap">
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="font-display text-2xl font-light" style="color:var(--gold-light)">{{ appt.time }}</span>
+        <span class="badge badge-{{ appt.status }}">
+          {% if appt.status == 'pending' %}Pendiente
+          {% elif appt.status == 'confirmed' %}Confirmada
+          {% else %}Cancelada{% endif %}
+        </span>
+        {% if appt.duration_hours %}
+          <span class="font-condensed text-xs text-gray-500">{{ appt.duration_hours }}h estimada(s)</span>
+        {% endif %}
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <div>
+          <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Cliente</p>
+          <p class="font-medium" style="color:var(--cream)">{{ appt.client_name }}</p>
+          <p class="text-gray-500 text-xs">{{ appt.client_phone }}</p>
+        </div>
+        <div>
+          <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Servicio</p>
+          <p style="color:var(--cream)">{{ appt.cut_type }}</p>
+        </div>
+        <div>
+          <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Estilo</p>
+          <p style="color:var(--cream)">{{ appt.style_name }}</p>
+        </div>
+        <div>
+          <p class="font-condensed text-xs text-gray-600 uppercase tracking-wide">Pago</p>
+          <p style="color:var(--cream)">{{ appt.payment_method }}</p>
+        </div>
+      </div>
+      {% if appt.notes %}
+      <p class="mt-3 text-gray-500 text-xs italic">{{ appt.notes }}</p>
+      {% endif %}
+    </div>
 
-            {% if appt.status == 'pending' %}
-            <div class="flex flex-col gap-2 min-w-0">
-              <form method="POST" action="/barbero/cita/{{ appt.id }}/accion" class="flex flex-col gap-2">
-                <input type="hidden" name="action" value="confirm">
-                <div>
-                  <p class="font-condensed text-xs text-gray-500 uppercase tracking-wide mb-1">Duración</p>
-                  <div class="flex gap-1">
-                    {% for dur in [1, 2, 3] %}
-                    <div class="dur-radio">
-                      <input type="radio" name="duration" id="dur_{{ appt.id }}_{{ dur }}" value="{{ dur }}" {% if dur == 1 %}checked{% endif %}>
-                      <label for="dur_{{ appt.id }}_{{ dur }}">{{ dur }}h</label>
-                    </div>
-                    {% endfor %}
-                  </div>
-                </div>
-                <button type="submit" class="btn-gold-sm">✓ Confirmar</button>
-              </form>
-              <form method="POST" action="/barbero/cita/{{ appt.id }}/accion">
-                <input type="hidden" name="action" value="cancel">
-                <button type="submit" class="btn-sm btn-cancel w-full" onclick="return confirm('¿Cancelar esta cita?')">✗ Cancelar</button>
-              </form>
+    {% if appt.status == 'pending' %}
+    <div class="flex flex-col gap-2 min-w-0">
+      <form method="POST" action="/barbero/cita/{{ appt.id }}/accion" class="flex flex-col gap-2">
+        <input type="hidden" name="action" value="confirm">
+        <div>
+          <p class="font-condensed text-xs text-gray-500 uppercase tracking-wide mb-1">Duracion</p>
+          <div class="flex gap-1">
+            {% for dur in [1, 2, 3] %}
+            <div class="dur-radio">
+              <input type="radio" name="duration" id="dur_{{ appt.id }}_{{ dur }}" value="{{ dur }}" {% if dur == 1 %}checked{% endif %}>
+              <label for="dur_{{ appt.id }}_{{ dur }}">{{ dur }}h</label>
             </div>
-            {% elif appt.status == 'confirmed' %}
-            <div class="text-right">
-              <form method="POST" action="/barbero/cita/{{ appt.id }}/accion">
-                <input type="hidden" name="action" value="cancel">
-                <button type="submit" class="btn-sm btn-cancel" onclick="return confirm('¿Cancelar cita confirmada?')">✗ Cancelar</button>
-              </form>
-            </div>
-            {% endif %}
-          </div>
-
-          <div class="flex items-center gap-2 mt-3 pt-3" style="border-top:1px solid rgba(255,255,255,0.04)">
-            <span class="font-condensed text-xs text-gray-700 uppercase tracking-wide">Ref:</span>
-            <span class="font-mono text-xs" style="color:rgba(201,168,76,0.6)">#{{ appt.id.upper() }}</span>
+            {% endfor %}
           </div>
         </div>
-        {% endfor %}
+        <button type="submit" class="btn-gold-sm">Confirmar</button>
+      </form>
+      <form method="POST" action="/barbero/cita/{{ appt.id }}/accion" onsubmit="return confirm('Cancelar esta cita?')">
+        <input type="hidden" name="action" value="cancel">
+        <div class="mb-2">
+          <label style="font-size:0.65rem">Motivo (opcional)</label>
+          <input type="text" name="motivo" placeholder="Ej. Sin disponibilidad"
+                 style="width:100%; padding:0.35rem 0.6rem; font-size:0.78rem;">
+        </div>
+        <button type="submit" class="btn-sm btn-cancel w-full">Cancelar</button>
+      </form>
+    </div>
+    {% elif appt.status == 'confirmed' %}
+    <div class="text-right">
+      <form method="POST" action="/barbero/cita/{{ appt.id }}/accion" onsubmit="return confirm('Cancelar cita confirmada?')">
+        <input type="hidden" name="action" value="cancel">
+        <div class="mb-2">
+          <label style="font-size:0.65rem">Motivo (opcional)</label>
+          <input type="text" name="motivo" placeholder="Ej. Sin disponibilidad"
+                 style="width:100%; padding:0.35rem 0.6rem; font-size:0.78rem;">
+        </div>
+        <button type="submit" class="btn-sm btn-cancel">Cancelar</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="flex items-center gap-2 mt-3 pt-3" style="border-top:1px solid rgba(255,255,255,0.04)">
+    <span class="font-condensed text-xs text-gray-700 uppercase tracking-wide">Ref:</span>
+    <span class="font-mono text-xs" style="color:rgba(201,168,76,0.6)">#{{ appt.id.upper() }}</span>
+  </div>
+</div>
+{% endfor %}
       </div>
     </div>
 

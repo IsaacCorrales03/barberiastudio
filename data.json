@@ -2,27 +2,105 @@
   "barbers": [
     {
       "id": "barber1",
-      "name": "Bebote",
-      "email": "bebote@studio.com",
+      "name": "Daniel Rivera",
+      "email": "bdr1232044@gmail.com",
       "password": "bebote123",
+      "number": "+506 6249 3663",
       "schedule": {
         "start": "08:00",
-        "end": "20:00"
+        "end": "23:59"
       },
-      "bio": "Barbero profesional con más de 5 años de experiencia.",
-      "specialty": "Fade & Beard"
+      "bio": "2 años de experiencia en cortes modernos y trabajo con tijera.",
+      "specialty": "Fade y tijera"
     }
   ],
-  "appointments": [],
+  "appointments": [
+    {
+      "id": "183384a0",
+      "barber_id": "barber1",
+      "barber_name": "Daniel Rivera",
+      "client_name": "Isaac Bolaños",
+      "client_phone": "60603711",
+      "date": "2026-05-20",
+      "time": "08:00",
+      "cut_type": "Corte + barba",
+      "style_id": "s5",
+      "style_name": "Taper Fade",
+      "payment_method": "Efectivo",
+      "notes": "",
+      "status": "confirmed",
+      "duration_hours": 2,
+      "barber_phone": "+506 6249 3663",
+      "created_at": "2026-05-19T23:04:39.045691"
+    },
+    {
+      "id": "fac1d2e3",
+      "barber_id": "barber1",
+      "barber_name": "Daniel Rivera",
+      "client_name": "Isaac Bolaños",
+      "client_phone": "60603711",
+      "date": "2026-05-20",
+      "time": "09:00",
+      "cut_type": "Corte + barba",
+      "style_id": "s5",
+      "style_name": "Taper Fade",
+      "payment_method": "Efectivo",
+      "notes": "",
+      "status": "pending",
+      "duration_hours": null,
+      "barber_phone": "+506 6249 3663",
+      "created_at": "2026-05-19T23:06:42.102515"
+    }
+  ],
   "styles": [
-    { "id": "s1", "name": "Fade Clásico",  "desc": "Degradado limpio y preciso",      "photo": null },
-    { "id": "s2", "name": "Pompadour",      "desc": "Estilo retro con volumen",        "photo": null },
-    { "id": "s3", "name": "Buzz Cut",       "desc": "Corte al ras uniforme",           "photo": null },
-    { "id": "s4", "name": "Undercut",       "desc": "Lados cortos, arriba largo",      "photo": null },
-    { "id": "s5", "name": "Taper Fade",     "desc": "Degradado suave y elegante",      "photo": "/static/uploads/style_477e19e3.webp" },
-    { "id": "s6", "name": "Caesar Cut",     "desc": "Corte romano clásico",            "photo": null },
-    { "id": "s7", "name": "Skin Fade",      "desc": "Fade hasta la piel",              "photo": null },
-    { "id": "s8", "name": "Quiff",          "desc": "Textura y volumen al frente",     "photo": null }
+    {
+      "id": "s1",
+      "name": "Fade Clásico",
+      "desc": "Degradado limpio y preciso",
+      "photo": null
+    },
+    {
+      "id": "s2",
+      "name": "Pompadour",
+      "desc": "Estilo retro con volumen",
+      "photo": null
+    },
+    {
+      "id": "s3",
+      "name": "Buzz Cut",
+      "desc": "Corte al ras uniforme",
+      "photo": null
+    },
+    {
+      "id": "s4",
+      "name": "Undercut",
+      "desc": "Lados cortos, arriba largo",
+      "photo": null
+    },
+    {
+      "id": "s5",
+      "name": "Taper Fade",
+      "desc": "Degradado suave y elegante",
+      "photo": "/static/uploads/style_477e19e3.webp"
+    },
+    {
+      "id": "s6",
+      "name": "Caesar Cut",
+      "desc": "Corte romano clásico",
+      "photo": null
+    },
+    {
+      "id": "s7",
+      "name": "Skin Fade",
+      "desc": "Fade hasta la piel",
+      "photo": null
+    },
+    {
+      "id": "s8",
+      "name": "Quiff",
+      "desc": "Textura y volumen al frente",
+      "photo": null
+    }
   ],
   "cut_types": [
     "Corte de cabello",
@@ -34,26 +112,26 @@
   "products": [
     {
       "id": "p1",
-      "name": "Pomada Mate",
-      "brand": "Uppercut Deluxe",
-      "desc": "Fijación fuerte con acabado mate. Ideal para fades y estilos texturizados.",
-      "price": 6500,
+      "name": "Shampoo",
+      "brand": "Hair To Go",
+      "desc": "Limpia, fija y estiliza.",
+      "price": 7000,
       "photo": null
     },
     {
       "id": "p2",
-      "name": "Aceite para Barba",
-      "brand": "Beardbrand",
-      "desc": "Hidrata y suaviza la barba. Aroma a madera de cedro y sándalo.",
-      "price": 4800,
+      "name": "Crema para el cabello",
+      "brand": "LENDAN",
+      "desc": "Tratamiento capilar integral.",
+      "price": 5000,
       "photo": null
     },
     {
       "id": "p3",
-      "name": "Cera Modeladora",
-      "brand": "American Crew",
-      "desc": "Fijación media con brillo natural. Fórmula lavable con agua.",
-      "price": 5200,
+      "name": "Laca",
+      "brand": "Hair To Go",
+      "desc": "Fijación.",
+      "price": 5000,
       "photo": null
     }
   ]
